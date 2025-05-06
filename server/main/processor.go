@@ -30,6 +30,14 @@ func (this *Processor) serverProcessMes(mes *message.Message) (err error) {
 		}
 	case message.RegisterMesType:
 		//处理注册
+		up := &process2.UserProcess{
+			Conn: this.Conn,
+		}
+		err = up.ServerProcessRegister(mes)
+	case message.SmsMesType:
+		// 创建一个smsprocess实例
+		smsProcess := &process2.SmsProcess{}
+		smsProcess.SendGroupMes(mes)
 	default:
 		fmt.Println("消息类型不存在，无法处理...")
 	}

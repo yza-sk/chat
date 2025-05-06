@@ -27,7 +27,7 @@ func (this *Transfer) ReadPkg() (mes message.Message, err error) {
 			fmt.Println("客户端正常退出")
 			return
 		} else {
-			fmt.Println(this.Buf[0:4])
+			//fmt.Println(this.Buf[0:4])
 			fmt.Println("conn.Read err:", err)
 			return
 		}
@@ -48,11 +48,11 @@ func (this *Transfer) ReadPkg() (mes message.Message, err error) {
 
 	// 把pkgLen反序列化成 ->message.Message
 	err = json.Unmarshal(this.Buf[0:pkgLen], &mes)
-	//fmt.Println(mes, "yes")
 	if err != nil {
 		fmt.Println("json.Unmarshal err:", err)
 		return
 	}
+	fmt.Println(mes)
 	return
 }
 
@@ -65,15 +65,17 @@ func (this *Transfer) WritePkg(data []byte) (err error) {
 	// 发送长度
 	n, err := this.Conn.Write(this.Buf[0:4])
 	if err != nil {
-		fmt.Println("conn.Write err:", err)
+		fmt.Println("conn.Write err1:", err)
 		return
 	}
 
 	// 发送data本身
-	n, err = this.Conn.Write(data)
+	//fmt.Println(string(data))
+	_, err = this.Conn.Write(data)
 	if n != int(pkgLen) || err != nil {
-		fmt.Println("conn.Write err:", err)
+		fmt.Println("conn.Write err2:", err)
 		return
 	}
+	fmt.Println("服务端信息返回成功")
 	return
 }

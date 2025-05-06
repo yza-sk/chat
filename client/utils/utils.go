@@ -17,14 +17,13 @@ type Transfer struct {
 }
 
 func (this *Transfer) ReadPkg() (mes message.Message, err error) {
-	//buf := make([]byte, 8096)
-	fmt.Println("读取客户端发送的数据...")
+	fmt.Println("读取服务端发送的数据...")
 	// conn.Read 在conn没有被关闭的情况下，才会阻塞
 	// 如果客户端关闭了conn则，就不会阻塞
 	_, err = this.Conn.Read(this.Buf[0:4])
 	if err != nil {
 		if err == io.EOF {
-			fmt.Println("客户端正常退出")
+			fmt.Println("服务端正常退出")
 			return
 		} else {
 			fmt.Println(this.Buf[0:4])
@@ -70,10 +69,12 @@ func (this *Transfer) WritePkg(data []byte) (err error) {
 	}
 
 	// 发送data本身
+	fmt.Println(data)
 	n, err = this.Conn.Write(data)
 	if n != int(pkgLen) || err != nil {
 		fmt.Println("conn.Write err:", err)
 		return
 	}
+	fmt.Println("客户端信息返回成功")
 	return
 }
